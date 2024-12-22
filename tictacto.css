@@ -1,0 +1,286 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.game-container {
+  text-align: center;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  grid-template-rows: repeat(3, 100px);
+  gap: 5px;
+  margin-bottom: 20px;
+}
+
+.cell {
+  width: 100px;
+  height: 100px;
+  background-color: #fff;
+  border: 2px solid #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.cell:hover {
+  background-color: #f0f0f0;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  background-color: #333;
+  color: white;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #555;
+}
+
+#status {
+  margin-top: 15px;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+const board = document.getElementById('game-board');
+const cells = document.querySelectorAll('.cell');
+const restartButton = document.getElementById('restart');
+const status = document.getElementById('status');
+
+let currentPlayer = 'X'; // Player 'X' starts first
+let gameActive = true;
+let boardState = ['', '', '', '', '', '', '', '', '']; // Empty board
+
+// Winning combinations (index positions of the cells)
+const winningCombinations = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8],
+  [2, 4, 6],
+];
+
+// Handle cell click
+function handleCellClick(event) {
+  const clickedCell = event.target;
+  const clickedIndex = clickedCell.getAttribute('data-index');
+
+  // Ignore if cell is already filled or the game is over
+  if (boardState[clickedIndex] !== '' || !gameActive) {
+    return;
+  }
+
+  // Update the board state and the UI
+  boardState[clickedIndex] = currentPlayer;
+  clickedCell.textContent = currentPlayer;
+
+  // Check for a winner
+  checkWinner();
+
+  // Switch player
+  currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+}
+
+// Check if there's a winner
+function checkWinner() {
+  for (const combination of winningCombinations) {
+    const [a, b, c] = combination;
+    if (boardState[a] && boardState[a] === boardState[b] && boardState[a] === boardState[c]) {
+      gameActive = false;
+      status.textContent = `${currentPlayer} wins!`;
+      return;
+    }
+  }
+
+  // Check for a draw
+  if (!boardState.includes('')) {
+    gameActive = false;
+    status.textContent = "It's a draw!";
+  }
+}
+
+// Restart the game
+function restartGame() {
+  gameActive = true;
+  currentPlayer = 'X';
+  boardState = ['', '', '', '', '', '', '', '', ''];
+  status.textContent = '';
+  cells.forEach(cell => cell.textContent = '');
+}
+
+// Add event listeners to cells
+cells.forEach(cell => {
+  cell.addEventListener('click', handleCellClick);
+});
+
+// Restart the game when button is clicked
+restartButton.addEventListener('click', restartGame);
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #800080; /* Purple background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.game-container {
+  text-align: center;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: white; /* White text color for better contrast */
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  grid-template-rows: repeat(3, 100px);
+  gap: 5px;
+  margin-bottom: 20px;
+}
+
+.cell {
+  width: 100px;
+  height: 100px;
+  background-color: #fff;
+  border: 2px solid #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.cell:hover {
+  background-color: #f0f0f0;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  background-color: #333;
+  color: white;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #555;
+}
+
+#status {
+  margin-top: 15px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: white; /* White color for the status text */
+}
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to right, #800080, #b300b3); /* Purple gradient */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.cell {
+  width: 100px;
+  height: 100px;
+  background-color: #fff;
+  border: 2px solid #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.cell:hover {
+  background-color: #f0f0f0;
+  transform: scale(1.1); /* Slight zoom-in effect */
+}
+
+/* Add this to your CSS for the pulse effect */
+.pulse {
+  animation: pulse-animation 0.6s ease-out infinite;
+}
+
+@keyframes pulse-animation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.cell {
+  width: 100px;
+  height: 100px;
+  background-color: #fff;
+  border: 2px solid #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+  transition: box-shadow 0.3s ease;
+}
+
+.cell:hover {
+  background-color: #f0f0f0;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.7); /* Neon glow effect */
+}
+body {
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(to right, #800080, #b300b3);
+  /* other styles */
+}
+
+
